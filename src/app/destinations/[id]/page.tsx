@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   ArrowLeft,
-  ArrowRight,
   CalendarDays,
   Check,
   MapPin,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react";
 import EditDestinationDialog from "@/components/destination/EditDestinationDialog";
 import DeleteDestinationDialog from "@/components/destination/DeleteDestinationDialog";
+import BookingCard from "@/components/booking/BookingCard";
 
 type ApiDestination = {
   _id?: string;
@@ -31,19 +31,7 @@ const highlights = [
   "Sunrise trek to Mount Batur",
 ];
 
-function formatDepartureDate(value?: string) {
-  if (!value) {
-    return "Flexible departure";
-  }
 
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat("en-US").format(date);
-}
 
 async function getDestination(id: string): Promise<ApiDestination> {
   const response = await fetch(`http://localhost:5000/destinations/${id}`);
@@ -70,7 +58,6 @@ export default async function DestinationDetailsPage({
   const destination = await getDestination(id);
   const name = destination.destinationName ?? "Untitled destination";
   const country = destination.country ?? "Unknown location";
-  const price = destination.price?.toString() ?? "0";
   const duration = destination.duration ?? "Flexible duration";
   const description =
     destination.description ||
@@ -157,38 +144,7 @@ export default async function DestinationDetailsPage({
           </div>
 
                 {/* Right side section */}
-          <aside className="h-fit border border-[#e8ebed] bg-white p-3 shadow-[0_2px_5px_rgba(15,23,42,0.12)] sm:p-4">
-            <p className="text-xs text-slate-500">Starting from</p>
-            <p className="mt-1 text-2xl font-semibold text-[#159fbe]">
-              ${price}
-            </p>
-            <p className="text-xs text-slate-500">per person</p>
-
-            <div className="mt-7 flex h-10 items-center border border-[#e8ebed] bg-[#f7f8f9] px-3 text-xs text-slate-700">
-              {formatDepartureDate(destination.departureDate)}
-            </div>
-
-            <Link
-              href={`/destinations/${id}/book`}
-              className="mt-3 flex h-10 items-center justify-center gap-2 bg-[#159fbe] text-xs text-white transition-colors hover:bg-[#118daa]"
-            >
-              Book Now
-              <ArrowRight size={15} />
-            </Link>
-
-            <ul className="mt-3 space-y-2 text-xs text-slate-500">
-              {[
-                "Free cancellation up to 7 days",
-                "Travel insurance included",
-                "24/7 customer support",
-              ].map((benefit) => (
-                <li key={benefit} className="flex items-start gap-2">
-                  <Check size={14} className="mt-0.5 shrink-0 text-green-600" />
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <BookingCard destination={destination} />
         </div>
       </div>
     </section>
