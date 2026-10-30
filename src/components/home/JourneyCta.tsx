@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react"
 
 export function JourneyCta() {
   return (
-    <section className="relative isolate flex min-h-[360px] items-center justify-center overflow-hidden px-6 py-20 text-center text-white sm:min-h-[400px] sm:px-10 lg:min-h-[440px]">
+    <section className="relative isolate flex min-h-90 items-center justify-center overflow-hidden px-6 py-20 text-center text-white sm:min-h-100 sm:px-10 lg:min-h-110">
       <Image
         src="/images/CTA.png"
         alt=""

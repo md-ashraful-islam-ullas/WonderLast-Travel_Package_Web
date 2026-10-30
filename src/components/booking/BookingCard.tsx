@@ -1,7 +1,6 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
 import { ArrowRight, Check } from "lucide-react";
-import Link from "next/link";
 import { Button } from "../ui/button";
 
 type ApiDestination = {
@@ -36,7 +35,7 @@ const handleBooking = async(e: React.FormEvent<HTMLFormElement>) => {
         departureDate: departureDate,
     }
 
-    const response = await fetch("http://localhost:5000/bookings", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

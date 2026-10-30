@@ -1,9 +1,15 @@
 import { auth } from "@/lib/auth";
 import MyBookingCard, { type Booking } from "@/components/booking/MyBookingCard";
 import { headers } from "next/headers";
+import getTokenFromServer from "@/lib/getTokenFromServer";
 
 async function getBookings(email: string): Promise<Booking[]> {
-  const response = await fetch(`http://localhost:5000/my-bookings/${email}`);
+  const token = await getTokenFromServer(); // Get the JWT token from the server
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-bookings/${email}`, {
+    headers: {
+      authorization: `Bearer ${token?.token}`, // Include the JWT token in the Authorization header
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load bookings: ${response.status}`);

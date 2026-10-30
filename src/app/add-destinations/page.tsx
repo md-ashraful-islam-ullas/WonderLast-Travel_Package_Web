@@ -5,6 +5,7 @@ import { Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import getTokenFromClient from "@/lib/getTokenFromClient";
 
 type DestinationFormValues = {
   destinationName: string;
@@ -54,16 +55,20 @@ export default function AddDestinationPage() {
     }
 
     setIsSubmitted(true);
-    const res = await fetch(`http://localhost:5000/add-destination`, {
+
+    const token = await getTokenFromClient(); // Get the JWT token from the client
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-destination`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
       },
       body: JSON.stringify(values),
     });
 
-    const data = await res.json();
-    console.log("Response from server:", data);
+    const result = await res.json();
+    console.log("Response from server:", result);
 
     console.log("Form submitted with values:", values);
   };

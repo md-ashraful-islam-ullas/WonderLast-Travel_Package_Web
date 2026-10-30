@@ -1,14 +1,9 @@
 import Link from "next/link";
-import {
-  ArrowLeft,
-  CalendarDays,
-  Check,
-  MapPin,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, CalendarDays, Check, MapPin, Star } from "lucide-react";
 import EditDestinationDialog from "@/components/destination/EditDestinationDialog";
 import DeleteDestinationDialog from "@/components/destination/DeleteDestinationDialog";
 import BookingCard from "@/components/booking/BookingCard";
+import getTokenFromServer from "@/lib/getTokenFromServer";
 
 type ApiDestination = {
   _id?: string;
@@ -31,10 +26,13 @@ const highlights = [
   "Sunrise trek to Mount Batur",
 ];
 
-
-
 async function getDestination(id: string): Promise<ApiDestination> {
-  const response = await fetch(`http://localhost:5000/destinations/${id}`);
+  const jwtToken = await getTokenFromServer(); // Get the JWT token from the server
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destinations/${id}`, {
+    headers: {
+      authorization: `Bearer ${jwtToken?.token}`, // Include the JWT token in the Authorization header
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load destination: ${response.status}`);
@@ -76,9 +74,8 @@ export default async function DestinationDetailsPage({
           </Link>
 
           <div className="flex items-center gap-2">
-            
             <EditDestinationDialog destination={destination} />
-            
+
             <DeleteDestinationDialog destination={destination} />
           </div>
         </div>
@@ -135,7 +132,10 @@ export default async function DestinationDetailsPage({
               <ul className="mt-3 grid gap-x-8 gap-y-3 text-xs text-slate-500 sm:grid-cols-2">
                 {highlights.map((highlight) => (
                   <li key={highlight} className="flex items-start gap-2">
-                    <Check size={14} className="mt-0.5 shrink-0 text-green-600" />
+                    <Check
+                      size={14}
+                      className="mt-0.5 shrink-0 text-green-600"
+                    />
                     {highlight}
                   </li>
                 ))}
@@ -143,7 +143,7 @@ export default async function DestinationDetailsPage({
             </div>
           </div>
 
-                {/* Right side section */}
+          {/* Right side section */}
           <BookingCard destination={destination} />
         </div>
       </div>

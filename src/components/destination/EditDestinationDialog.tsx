@@ -16,6 +16,7 @@ import { Save, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import getTokenFromClient from "@/lib/getTokenFromClient";
 
 type DestinationFormValues = {
   destinationName: string;
@@ -87,12 +88,15 @@ const EditDestinationDialog = ({
     setIsSubmitted(true);
     setOpen(false); // Close the dialog after submission
     router.refresh(); // Refresh the page to reflect the updated data
+
+    const token = await getTokenFromClient(); // Get the JWT token from the client
     const res = await fetch(
-      `http://localhost:5000/destinations/${destination._id}`,
-      {
+        `${process.env.NEXT_PUBLIC_API_URL}/destinations/${destination._id}`,
+        {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
         },
         body: JSON.stringify(values),
       },

@@ -28,7 +28,7 @@ const fallbackImages = [
 ];
 
 async function getDestinations(): Promise<Destination[]> {
-  const response = await fetch("http://localhost:5000/destinations");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destinations`);
 
   if (!response.ok) {
     throw new Error(`Failed to load destinations: ${response.status}`);

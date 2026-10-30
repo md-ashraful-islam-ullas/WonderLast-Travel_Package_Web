@@ -11,6 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import getTokenFromClient from "@/lib/getTokenFromClient";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 type ApiDestination = {
@@ -31,9 +32,14 @@ const DeleteDestinationDialog = ({
 }) => {
     const router = useRouter();
 
+
     const handleDelete = async () => {
-        const res = await fetch(`http://localhost:5000/destinations/${destination._id}`, {
+        const token = await getTokenFromClient(); // Get the JWT token from the client
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/destinations/${destination._id}`, {
             method: "DELETE",
+            headers: {
+                authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+            },
         });
         const data = await res.json();
         console.log(data);
