@@ -4,7 +4,7 @@ import { ArrowRight, Search } from "lucide-react";
 
 const searchFields = [
   { label: "Location", value: "Address, City Or Zip" },
-  { label: "Date/Duration", value: "Anytime/3 Days" },
+  { label: "Date/Duration", value: "Anytime/4 Days" },
   { label: "Budget", value: "$0-$3000" },
   { label: "People", value: "5-10" },
 ];
